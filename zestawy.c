@@ -1,5 +1,4 @@
 #include "zestawy.h"
-#include <stdio.h>
 
 void zestaw1_0()
 {
@@ -106,13 +105,13 @@ int zestaw2_2()
 }
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <locale.h>
 int zestaw2_3()
 {
 	setlocale(LC_ALL, "");
 	int zakres_dolny=1, zakres_gorny=100, zgadywana_liczba, ilosc_prob, powtorz=1;
 	char odp;
-	/*#define RAND_MAX = zakres_gorny;*/
 	printf("Zaraz zgadnê liczbê, któr¹ sobie pomyœlisz [1, 100].\n\n");
 	
 	zgadywana_liczba = rand() % (zakres_gorny + 1 - zakres_dolny) + zakres_dolny;
@@ -126,7 +125,6 @@ int zestaw2_3()
 		case 'T':
 			printf("Uda³o siê!");
 			return 0;
-			break;  // na wszelki wypadek, return koñczy program
 		case 'N':
 			while(powtorz)
 			{

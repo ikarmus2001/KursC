@@ -8,3 +8,9 @@ void zestaw1_1();
 int zestaw2_0();
 int zestaw2_1();
 int zestaw2_2();
+
+int zestaw4_0();
+int zestaw4_1();
+int funkcja4_1(int);
+int zestaw4_1();
+int funkcja4_2(int);

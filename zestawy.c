@@ -163,66 +163,6 @@ int zestaw2_3()
 	return 1;
 }
 
-
-#define MAKS_DL 60
-unsigned litery['Z' - 'A' + 1];
-unsigned najwiecej = 0;
-
-/*
-Funkcja czyta ci�g znak�w z wej�cia. Do tablicy litery
-wstawia ilo�ci wyst�pie� poszczeg�lnych liter, a najwi�ksz�
-z nich do zmiennej najwiecej.
-*/
-void czytaj(void) {
-	int c;
-	while ((c = getchar()) != '\n')
-	{
-		// sprawdzamy czy wczytany znak jest liter�:
-		if (isalpha(c))
-		{
-			c = toupper(c);
-			//je�li tak to zwi�kszamy odpowiedni� kom�rk� tablicy
-			//w razie potrzeby inkrementujemy zmienn� najwiecej:
-			if (litery[c - 'A'] == najwiecej) najwiecej++;
-			litery[c - 'A']++;
-		}
-	}
-}
-
-
-/*
-Funkcja wy�wietla histogram na podstawie tablicy litery.
-Histogram jest skalowany tak, aby jego najd�u�szy wiersz
-mia� MAKS_DL znak�w.
-*/
-void rysuj(void)
-{
-	char znaczki[MAKS_DL];
-	for (int x = 0; x < MAKS_DL; x++)
-	{
-		znaczki[x] = '#';
-	}
-	char litera;
-	int iloscZnakow;
-	for (int i = 0; i < sizeof(litery) / sizeof(litery[0]); i++)
-	{
-		iloscZnakow = (MAKS_DL * litery[i]) / najwiecej;
-		litera = 'A' + i;
-		printf("%c:\t", litera);
-		printf("%.*s\n", iloscZnakow, znaczki);
-	}
-}
-
-int zadanie5_0(void)
-{
-	czytaj();
-	// sprawdzamy, czy zosta� wczytany jakikolwiek znak,
-	// aby unikn�� dzielenia przez zero.
-	if (najwiecej != 0)
-		rysuj();
-	return 0;
-}
-
 int NWD(int l1, int l2)
 {
 	int tmp;
@@ -319,5 +259,64 @@ int zestaw4_2()
 		scanf("%d%*c", &liczba);
 		printf("%d\n", funkcja4_2(liczba));
 	}
+	return 0;
+}
+
+#define MAKS_DL 60
+unsigned litery['Z' - 'A' + 1];
+unsigned najwiecej = 0;
+
+/*
+Funkcja czyta ci�g znak�w z wej�cia. Do tablicy litery
+wstawia ilo�ci wyst�pie� poszczeg�lnych liter, a najwi�ksz�
+z nich do zmiennej najwiecej.
+*/
+void czytaj(void) {
+	int c;
+	while ((c = getchar()) != '\n')
+	{
+		// sprawdzamy czy wczytany znak jest liter�:
+		if (isalpha(c))
+		{
+			c = toupper(c);
+			//je�li tak to zwi�kszamy odpowiedni� kom�rk� tablicy
+			//w razie potrzeby inkrementujemy zmienn� najwiecej:
+			if (litery[c - 'A'] == najwiecej) najwiecej++;
+			litery[c - 'A']++;
+		}
+	}
+}
+
+
+/*
+Funkcja wy�wietla histogram na podstawie tablicy litery.
+Histogram jest skalowany tak, aby jego najd�u�szy wiersz
+mia� MAKS_DL znak�w.
+*/
+void rysuj(void)
+{
+	char znaczki[MAKS_DL];
+	for (int x = 0; x < MAKS_DL; x++)
+	{
+		znaczki[x] = '#';
+	}
+	char litera;
+	int iloscZnakow;
+	for (int i = 0; i < sizeof(litery) / sizeof(litery[0]); i++)
+	{
+		iloscZnakow = (MAKS_DL * litery[i]) / najwiecej;
+		litera = 'A' + i;
+		printf("%c:\t", litera);
+		printf("%.*s\n", iloscZnakow, znaczki);
+	}
+}
+
+int zadanie5_0(void)
+{
+	czytaj();
+	// sprawdzamy, czy zosta� wczytany jakikolwiek znak,
+	// aby unikn�� dzielenia przez zero.
+	if (najwiecej != 0)
+		rysuj();
 	return 0;
 }

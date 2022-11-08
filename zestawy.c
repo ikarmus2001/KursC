@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
+#include <ctype.h>
 
 void zestaw1_0()
 {
@@ -113,7 +114,7 @@ int zestaw2_3()
 	int zakres_dolny = 1, zakres_gorny = 100, zgadywana_liczba, ilosc_prob, powtorz = 1;
 	char odp;
 	/*#define RAND_MAX = zakres_gorny;*/
-	printf("Zaraz zgadnê liczbê, któr¹ sobie pomyœlisz [1, 100].\n\n");
+	printf("Zaraz zgadnï¿½ liczbï¿½, ktï¿½rï¿½ sobie pomyï¿½lisz [1, 100].\n\n");
 
 	zgadywana_liczba = rand() % (zakres_gorny + 1 - zakres_dolny) + zakres_dolny;
 	while (1)
@@ -124,14 +125,14 @@ int zestaw2_3()
 		switch (odp)
 		{
 		case 'T':
-			printf("Uda³o siê!");
+			printf("Udaï¿½o siï¿½!");
 			return 0;
-			break;  // na wszelki wypadek, return koñczy program
+			break;  // na wszelki wypadek, return koï¿½czy program
 		case 'N':
 			while (powtorz)
 			{
 				powtorz = 0;
-				printf("Twoja liczba jest mniejsza [M] czy wiêksza [W] od %d?\n", zgadywana_liczba);
+				printf("Twoja liczba jest mniejsza [M] czy wiï¿½ksza [W] od %d?\n", zgadywana_liczba);
 				scanf("%c", &odp);
 				switch (odp)
 				{
@@ -149,17 +150,77 @@ int zestaw2_3()
 				}
 				default:
 					powtorz = 1;
-					printf("Poda³eœ nieprzewidzian¹ odpowiedŸ\n");
+					printf("Podaï¿½eï¿½ nieprzewidzianï¿½ odpowiedï¿½\n");
 					break;
 				}
 			}
 			break;
 		default:
-			printf("Poda³eœ nieprzewidzian¹ odpowiedŸ\n");
+			printf("Podaï¿½eï¿½ nieprzewidzianï¿½ odpowiedï¿½\n");
 			break;
 		}
 	}
 	return 1;
+}
+
+
+#define MAKS_DL 60
+unsigned litery['Z' - 'A' + 1];
+unsigned najwiecej = 0;
+
+/*
+Funkcja czyta ciï¿½g znakï¿½w z wejï¿½cia. Do tablicy litery
+wstawia iloï¿½ci wystï¿½pieï¿½ poszczegï¿½lnych liter, a najwiï¿½kszï¿½
+z nich do zmiennej najwiecej.
+*/
+void czytaj(void) {
+	int c;
+	while ((c = getchar()) != '\n')
+	{
+		// sprawdzamy czy wczytany znak jest literï¿½:
+		if (isalpha(c))
+		{
+			c = toupper(c);
+			//jeï¿½li tak to zwiï¿½kszamy odpowiedniï¿½ komï¿½rkï¿½ tablicy
+			//w razie potrzeby inkrementujemy zmiennï¿½ najwiecej:
+			if (litery[c - 'A'] == najwiecej) najwiecej++;
+			litery[c - 'A']++;
+		}
+	}
+}
+
+
+/*
+Funkcja wyï¿½wietla histogram na podstawie tablicy litery.
+Histogram jest skalowany tak, aby jego najdï¿½uï¿½szy wiersz
+miaï¿½ MAKS_DL znakï¿½w.
+*/
+void rysuj(void)
+{
+	char znaczki[MAKS_DL];
+	for (int x = 0; x < MAKS_DL; x++)
+	{
+		znaczki[x] = '#';
+	}
+	char litera;
+	int iloscZnakow;
+	for (int i = 0; i < sizeof(litery) / sizeof(litery[0]); i++)
+	{
+		iloscZnakow = (MAKS_DL * litery[i]) / najwiecej;
+		litera = 'A' + i;
+		printf("%c:\t", litera);
+		printf("%.*s\n", iloscZnakow, znaczki);
+	}
+}
+
+int zadanie5_0(void)
+{
+	czytaj();
+	// sprawdzamy, czy zostaï¿½ wczytany jakikolwiek znak,
+	// aby uniknï¿½ï¿½ dzielenia przez zero.
+	if (najwiecej != 0)
+		rysuj();
+	return 0;
 }
 
 int NWD(int l1, int l2)
@@ -191,10 +252,10 @@ int zestaw4_0()
 	return 0;
 }
 
-// iloœæ elementów w arrayu (bez jakis szczególnych zabezpieczeñ co do typu)
+// iloï¿½ï¿½ elementï¿½w w arrayu (bez jakis szczegï¿½lnych zabezpieczeï¿½ co do typu)
 #define length(x)  (sizeof(x) / sizeof((x)[0]))
 // via https://stackoverflow.com/questions/37538/how-do-i-determine-the-size-of-my-array-in-c
-// równie dobrze mog³em podaæ na sta³e 8, ale mo¿liwe ¿e bêdzie potrzeba rozbudowy funkcji
+// rï¿½wnie dobrze mogï¿½em podaï¿½ na staï¿½e 8, ale moï¿½liwe ï¿½e bï¿½dzie potrzeba rozbudowy funkcji
 
 int funkcja4_1(int liczba)
 {

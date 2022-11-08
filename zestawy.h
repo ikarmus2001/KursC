@@ -14,3 +14,5 @@ int zestaw4_1();
 int funkcja4_1(int);
 int zestaw4_1();
 int funkcja4_2(int);
+
+int zestaw5_0();

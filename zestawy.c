@@ -113,7 +113,6 @@ int zestaw2_3()
 	setlocale(LC_ALL, "");
 	int zakres_dolny = 1, zakres_gorny = 100, zgadywana_liczba, ilosc_prob, powtorz = 1;
 	char odp;
-	/*#define RAND_MAX = zakres_gorny;*/
 	printf("Zaraz zgadn� liczb�, kt�r� sobie pomy�lisz [1, 100].\n\n");
 
 	zgadywana_liczba = rand() % (zakres_gorny + 1 - zakres_dolny) + zakres_dolny;
@@ -127,7 +126,6 @@ int zestaw2_3()
 		case 'T':
 			printf("Uda�o si�!");
 			return 0;
-			break;  // na wszelki wypadek, return ko�czy program
 		case 'N':
 			while (powtorz)
 			{

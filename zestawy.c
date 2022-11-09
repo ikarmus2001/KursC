@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 void zestaw1_0()
 {
@@ -309,7 +310,7 @@ void rysuj(void)
 	}
 }
 
-int zadanie5_0(void)
+int zestaw5_0(void)
 {
 	czytaj();
 	// sprawdzamy, czy zosta� wczytany jakikolwiek znak,
@@ -318,3 +319,59 @@ int zadanie5_0(void)
 		rysuj();
 	return 0;
 }
+
+#define wielkosc 32
+char slowoA[wielkosc], slowoB[wielkosc];
+
+/*Funkcja sprawdza czy slowoA i slowoB to anagramy*/
+bool czyAnagramy() {
+	int litery['Z' - 'A' + 1];
+
+	// czyścimy tablicę
+	for (int i = 'A'; i <= 'Z'; i++) litery[i - 'A'] = 0;
+
+	// zliczamy litery w pierwszym słowie:
+	for (int i = 0; i < length(slowoA); i++)
+	{
+		if (slowoA[i] != '\0')
+		{
+			litery[toupper(slowoA[i]) - 'A']++;
+			continue;
+		}
+		break;
+	}
+
+	// zliczamy litery w drugim slowie:
+	for (int i = 0; i < length(slowoB); i++)
+	{
+		if (slowoB[i] != '\0')
+		{
+			int l = --litery[toupper(slowoB[i]) - 'A'];
+			if (l < 0) return false;
+			continue;
+		}
+		break;
+	}
+	// słowa są anagramami jesli roznica wynosi zero:
+	for (int i = 0; i < length(litery); i++)
+	{
+		if (litery[i] != 0) return false;
+	}
+	return true;
+}
+
+int zestaw5_1()
+{
+	int T;
+	scanf("%d", &T);
+	for (int i = 0; i < T; i++) {
+		scanf("%s%s", slowoA, slowoB);
+
+		if (czyAnagramy())
+			printf("Tak\n");
+		else
+			printf("Nie\n");
+	}
+	return 0;
+}
+

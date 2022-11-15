@@ -375,3 +375,64 @@ int zestaw5_1()
 	return 0;
 }
 
+#define ROZMIAR 99
+unsigned tablica[ROZMIAR][ROZMIAR];
+
+/*
+* Funkcja wyświetlająca tablicę "tablica" o podanym ROZMIARze
+*/
+void wyswietl(void)
+{
+	for (int i = 0; i < ROZMIAR; i++)
+	{
+		for (int j = 0; j < ROZMIAR - 1; j++) printf("%d\t", tablica[i][j]);
+		printf("%d\n", tablica[i][ROZMIAR - 1]);
+	}
+}
+
+/*Funkcja wypelnia tablice po spirali*/
+void wypelnij()
+{
+	int rozmiar_wypelniania = ROZMIAR;
+	unsigned int x = 0, y = 0, c = 0;
+	int operacja[4] = { 1, 0, -1, 0 };
+	int operacja_x, operacja_y;
+	char pierwszyObiegPetli = 1;
+	for (int obrot = 0; obrot < (ROZMIAR * 2) - 1; obrot++)
+	{
+		operacja_x = operacja[(obrot + 3) % 4];  // zaczynamy od ostatniego 0
+		operacja_y = operacja[obrot % 4];  // zaczynamy od początku
+
+		if (obrot % 2 == 1)
+		{
+			rozmiar_wypelniania = rozmiar_wypelniania - 1;
+		}
+
+		if (rozmiar_wypelniania == 1)
+		{
+			x = x + operacja_x;
+			y = y + operacja_y;
+			tablica[x][y] = ++c;
+		}
+		else
+			// Sprawdzenie czy indeksy nie wykraczają poza granice tablicy
+		{
+			for (int _ = 0; _ < rozmiar_wypelniania; _++)
+			{
+				if (pierwszyObiegPetli != 1)
+				{
+					x = x + operacja_x;
+					y = y + operacja_y;
+				}
+				pierwszyObiegPetli = 0;
+				tablica[x][y] = ++c;
+			}
+		}
+	}
+}
+
+int zestaw5_2(void) {
+	wypelnij();
+	wyswietl();
+	return 0;
+}

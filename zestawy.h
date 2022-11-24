@@ -18,3 +18,8 @@ int funkcja4_2(int);
 int zestaw5_0();
 int zestaw5_1();
 int zestaw5_2();
+
+int zestaw6_0();
+
+//int zestaw7_0();
+int zestaw7_1();

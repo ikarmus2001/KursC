@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+#pragma region Zestaw 1
 void zestaw1_0()
 {
 	printf("%s", "Hello World");
@@ -20,6 +21,9 @@ void zestaw1_1()
 		printf("%d\t%d\t%d\n", n, n * n, n * n * n);
 	}
 }
+#pragma endregion
+
+#pragma region Zestaw 2
 
 int zestaw2_0()
 {
@@ -162,6 +166,9 @@ int zestaw2_3()
 	return 1;
 }
 
+#pragma endregion
+
+#pragma region Zestaw 4
 int NWD(int l1, int l2)
 {
 	int tmp;
@@ -260,7 +267,9 @@ int zestaw4_2()
 	}
 	return 0;
 }
+#pragma endregion
 
+#pragma region Zestaw 5
 #define MAKS_DL 60
 unsigned litery['Z' - 'A' + 1];
 unsigned najwiecej = 0;
@@ -436,3 +445,97 @@ int zestaw5_2(void) {
 	wyswietl();
 	return 0;
 }
+#pragma endregion
+
+#pragma region Zestaw 6
+
+void zamien(double** first, double** second)
+{
+	double* tmp = *first;
+	first = second;
+	*second = tmp;
+}
+
+int zestaw6_0(void)
+{
+	int T, j, k;
+	scanf("%d", &T);
+	for (int i = 0; i < T; i++)
+	{
+
+		scanf("%lf %lf", &j, &k);
+
+		printf("wartosc pierwszej liczby = %f\n", j);
+		printf("wartosc drugiej liczby = %f\n", k);
+
+		zamien(&j, &k);
+
+		printf("Po zamianie :\n");
+
+		printf("wartosc pierwszej liczby = %f\n", j);
+		printf("wartosc drugiej liczby = %f\n", k);
+	}
+	return 0;
+}
+#pragma endregion
+
+#pragma region Zestaw 7
+
+typedef struct wymierne
+{
+	int calkowita;
+	int licznik;
+	int mianownik;
+} wymierna;
+
+wymierna suma(wymierna A, wymierna B)
+{
+	wymierna result;
+	result.calkowita = 0;
+	result.mianownik = A.mianownik * B.mianownik;
+	result.licznik = (A.licznik * B.mianownik) + (B.licznik * A.mianownik);
+
+	if (result.licznik > result.mianownik)
+	{
+		result.calkowita = result.licznik / result.mianownik;
+		result.licznik -= (result.calkowita * result.mianownik);
+	}
+	char skracanie = 1;
+	while (skracanie)
+	{
+		skracanie = 0;
+		for (int i = 2; i < abs(result.licznik + 1); i++)
+		{
+			if ((result.mianownik % i) + (result.licznik % i) == 0) // licznik i mianownik podzielne
+			{
+				result.mianownik /= i;
+				result.licznik /= i;
+				skracanie = 1;
+				break;
+			}
+		}
+	}
+	return result;
+}
+
+void wypiszWymierna(wymierna ulamek)
+{
+	int tmp = ulamek.licznik + (ulamek.mianownik * ulamek.calkowita);
+	printf("%d/%d\n", tmp, ulamek.mianownik);
+}
+
+
+int zestaw7_1() {
+	wymierna pierwsza, druga, wynik;
+	int T;
+	scanf("%d", &T);
+	for (int i = 0; i < T; i++) {
+		scanf("%d %d %d %d", &pierwsza.licznik, &pierwsza.mianownik, &druga.licznik, &druga.mianownik);
+		wynik = suma(pierwsza, druga);
+		printf("Suma ulamkow: ");
+		wypiszWymierna(wynik);
+	}
+	return 0;
+}
+
+#pragma endregion

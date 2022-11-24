@@ -15,77 +15,65 @@
 
 // w Visual Studio (22) kompilator krzyczy
 // o 'niebezpiecznych' funkcjach (printf_s i scanf_s)
-#define _CRT_SECURE_NO_WARNINGS  
+#define _CRT_SECURE_NO_WARNINGS
+//#define ROZMIAR 30
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
-//int main()
-//{
-//	zestaw4_2();
-//
-//	return 0;
-//}
+// Dana jest struktura książka
+struct ksiazka {
+	char autor[255];
+	char tytul[255];
+	unsigned ilosc;
+	float cena;
+};
 
-void zamien(double *first, double *second) 
+bool wypelnijMagazyn(const char* nazwaPliku, struct ksiazka* magazyn)
 {
-    double tmp = *first;
-    *first = *second;
-    *second = tmp;
+	FILE* fp;
+	char* result;
+	char napis[ROZMIAR];
+	struct ksiazka* k;
+
+	fp = fopen(nazwaPliku, "r");
+	if (fp == NULL)
+	{
+		printf("Nie można otworzyć pliku\n");
+		return false;
+	}
+	for (int i = 0; i < ROZMIAR; i++)
+	{
+		k = (struct ksiazka*)malloc(sizeof(struct ksiazka));
+		result = fgets(napis, 100, fp);
+		fscanf(fp, "%[^\ ]s;%s;%d;%lf", &k->tytul, &k->autor, &k->ilosc, &k->cena);
+		magazyn[i] = *k;
+		free(k);
+	}
+	fclose(fp);
+	return true;
 }
 
-int main(void) 
+void wyswietlKsiazke(int pozycja, struct ksiazka* magazyn)
 {
 
-    int T;
-    double j = 0.00, k = 0.00;
-    
-
-    scanf("%d", &T);
-    for (int i = 0; i < T; i++) {
-        scanf("%s%s", &j, &k);
-        double* jptr = &j, * kptr = &k;
-        printf("j ma wartosc %f i jest przechowywany pod adresem %p\n", j, &j);//%p pointer address
-        printf("k ma wartosc %f i jest przechowywany pod adresem %p\n", k, &k);
-
-        zamien(&j, &k);
-
-        printf("j ma wartosc %f i jest przechowywany pod adresem %p\n", *jptr, &jptr);//%p pointer address
-        printf("k ma wartosc %f i jest przechowywany pod adresem %p\n", *kptr, &kptr);
-    }
-    return 0;
 }
 
+int main(void) {
 
-//ptr = &k;
-    //printf("\n");
-//printf("ptr ma wartosc %p i jest przechowywany po adresem %p\n", ptr, &ptr);
-    //printf("Wartosc, na ktora wskazyje ptr to  %d\n", *ptr);
-    //printf("Rozmiar int  %ld bajtow\n", sizeof(int));
-    //printf("\n");
-    //printf("Zobacz roznice: ptr: %p,  ptr + 1: %p\n", ptr, ptr + 1);
-    //printf("ptr: %d,  ptr + 1: %d\n", *ptr, *(ptr + 1));
+	// dana jest tablica magazyn przechowująca obiekty struktury książka
+	struct ksiazka magazyn[ROZMIAR];
+	int T;
+	int pozycja;
+	char NazwaPliku[200];
 
-
-
-//6.1
-
-//void my_split(const char source*, char* first, char* second, const char delim)
-//{
-//
-//}
-
-/*int main(void) {
-    int max_n = 200;
-    char zrodlo[max_n];
-    char strA[max_n];
-    char strB[max_n];
-    int T;
-    scanf("%d%*c", &T);
-    for (int i = 0; i < T; i++) {
-        fgets(zrodlo, max_n, stdin);
-        my_split(zrodlo, strA, strB, ';');
-        printf("Pierwszy: %s\n", strA);
-        printf("Drugi: %s\n", strB);
-    }
-
-}*/
+	scanf("%d", &T);
+	for (int i = 0; i < T; i++) {
+		scanf("%s %d", NazwaPliku, &pozycja);
+		bool sukces = wypelnijMagazyn(NazwaPliku, magazyn);
+		if (sukces)
+			wyswietlKsiazke(pozycja, magazyn);
+	}
+}

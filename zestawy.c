@@ -595,3 +595,47 @@ int zestaw7_2(void)
 
 
 #pragma endregion
+
+#pragma region 8.1
+
+//void push_front(Wezel** node, int value)
+//{
+//	Wezel* nowy;
+//	if ((nowy = (Wezel*)malloc(sizeof(Wezel))) == NULL)
+//	{
+//		fprintf(stderr, "Za mało pamięci!\n");
+//		exit(ZA_MALO_PAMIECI);
+//	}
+//	nowy->wartosc = value;
+//	nowy->nastepny = *node;
+//	*node = nowy;  // napisanie pierwszego elementu
+//}
+//
+//int zestaw8_1()
+//{
+//	int T;
+//	char linia[20];
+//	int x, y, error;
+//	Wezel* pierwszy = NULL;
+//
+//	scanf("%d", &T);
+//	for (int i = 0; i < T; i++) {
+//		scanf("%s", linia);
+//		if (strstr(linia, "push_back")) {
+//			scanf("%d", &x);
+//			printf("test %d: %s %d\n", i, linia, x);
+//			push_back(&pierwszy, x);
+//			wypisz(pierwszy);
+//		}
+//		else {
+//			scanf("%d", &x);
+//			printf("test %d: %s %d\n", i, linia, x);
+//			push_front(&pierwszy, x);
+//			wypisz(pierwszy);
+//		}
+//	}
+//	return 0;
+//}
+
+#pragma endregion
+

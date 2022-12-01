@@ -538,4 +538,60 @@ int zestaw7_1() {
 	return 0;
 }
 
+// Dana jest struktura książka
+struct ksiazka {
+	char autor[255];
+	char tytul[255];
+	unsigned ilosc;
+	float cena;
+};
+
+bool wypelnijMagazyn(const char* nazwaPliku, struct ksiazka* magazyn)
+{
+	FILE* fp;
+	char* result;
+	char napis[ROZMIAR];
+	struct ksiazka* k;
+
+	fp = fopen(nazwaPliku, "r");
+	if (fp == NULL)
+	{
+		printf("Nie można otworzyć pliku\n");
+		return false;
+	}
+	for (int i = 0; i < ROZMIAR; i++)
+	{
+		k = (struct ksiazka*)malloc(sizeof(struct ksiazka));
+		result = fgets(napis, 100, fp);
+		fscanf(fp, "%[^\ ]s;%s;%d;%lf", &k->tytul, &k->autor, &k->ilosc, &k->cena);
+		magazyn[i] = *k;
+		free(k);
+	}
+	fclose(fp);
+	return true;
+}
+
+void wyswietlKsiazke(int pozycja, struct ksiazka* magazyn)
+{
+
+}
+
+int zestaw7_2(void) 
+{
+	// dana jest tablica magazyn przechowująca obiekty struktury książka
+	struct ksiazka magazyn[ROZMIAR];
+	int T;
+	int pozycja;
+	char NazwaPliku[200];
+
+	scanf("%d", &T);
+	for (int i = 0; i < T; i++) {
+		scanf("%s %d", NazwaPliku, &pozycja);
+		bool sukces = wypelnijMagazyn(NazwaPliku, magazyn);
+		if (sukces)
+			wyswietlKsiazke(pozycja, magazyn);
+	}
+}
+
+
 #pragma endregion

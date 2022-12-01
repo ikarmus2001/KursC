@@ -16,64 +16,104 @@
 // w Visual Studio (22) kompilator krzyczy
 // o 'niebezpiecznych' funkcjach (printf_s i scanf_s)
 #define _CRT_SECURE_NO_WARNINGS
-//#define ROZMIAR 30
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <stdbool.h>
+#include <string.h>
+#define ZA_MALO_PAMIECI -1
 
-// Dana jest struktura książka
-struct ksiazka {
-	char autor[255];
-	char tytul[255];
-	unsigned ilosc;
-	float cena;
-};
+typedef struct wezel {
+    int wartosc;
+    struct wezel* nastepny;
+    //struct wezel *poprzedni;  //w przypadku listy dwukierunkowej
+} Wezel;
 
-bool wypelnijMagazyn(const char* nazwaPliku, struct ksiazka* magazyn)
+
+/**********************************************************/
+void wypisz(Wezel* pierwszy) {
+    Wezel* biezacy = pierwszy;
+
+    if (!biezacy) {
+        printf("Pusta lista\n");
+    }
+
+    while (biezacy != NULL) {
+        printf("%d\n", biezacy->wartosc);
+        biezacy = biezacy->nastepny;
+    }
+    printf("\n");
+}
+/**********************************************************/
+
+//wstaw element na koniec listy
+void push_back(Wezel** pierwszy, int liczba) 
 {
-	FILE* fp;
-	char* result;
-	char napis[ROZMIAR];
-	struct ksiazka* k;
+    Wezel* element;  // konstruujemy nowy węzeł
+    Wezel* iterator = *pierwszy;
 
-	fp = fopen(nazwaPliku, "r");
-	if (fp == NULL)
-	{
-		printf("Nie można otworzyć pliku\n");
-		return false;
-	}
-	for (int i = 0; i < ROZMIAR; i++)
-	{
-		k = (struct ksiazka*)malloc(sizeof(struct ksiazka));
-		result = fgets(napis, 100, fp);
-		fscanf(fp, "%[^\ ]s;%s;%d;%lf", &k->tytul, &k->autor, &k->ilosc, &k->cena);
-		magazyn[i] = *k;
-		free(k);
-	}
-	fclose(fp);
-	return true;
+    if ((element = (Wezel*)malloc(sizeof(Wezel))) == NULL) 
+    {
+        fprintf(stderr, "Za mało pamięci!\n");
+        exit(ZA_MALO_PAMIECI);
+    }
+    element->wartosc = liczba;
+    element->nastepny = NULL;
+
+    if (iterator == NULL) //gdy pusta lista
+    {
+        *pierwszy = element;
+        return;
+    }
+
+    while (iterator->nastepny != NULL) {
+        iterator = iterator->nastepny;
+    }
+
+    iterator->nastepny = element;
 }
 
-void wyswietlKsiazke(int pozycja, struct ksiazka* magazyn)
+/**********************************************************/
+// Funkcja usuwa pierwszy element z jednokierunkowej listy
+int pop_front(Wezel **pierwszy, int *result)
 {
+    Wezel *node = *pierwszy;
+    if (!node)
+        return -1;
 
+    result = node.wartosc;
+    pierwszy = node.nastepny;
+    free(node);
+    return 0;
 }
+/**********************************************************/
 
-int main(void) {
+int main() 
+{
+    int T;
+    char linia[20];
+    int x, y;
+    Wezel* pierwszy = NULL;
 
-	// dana jest tablica magazyn przechowująca obiekty struktury książka
-	struct ksiazka magazyn[ROZMIAR];
-	int T;
-	int pozycja;
-	char NazwaPliku[200];
 
-	scanf("%d", &T);
-	for (int i = 0; i < T; i++) {
-		scanf("%s %d", NazwaPliku, &pozycja);
-		bool sukces = wypelnijMagazyn(NazwaPliku, magazyn);
-		if (sukces)
-			wyswietlKsiazke(pozycja, magazyn);
-	}
+    scanf("%d", &T);
+    for (int i = 0; i < T; i++) 
+    {
+        scanf("%s", linia);
+        if (strstr(linia, "push_back")) 
+        {
+            scanf("%d", &x);
+            printf("test %d: %s %d\n", i, linia, x);
+            push_back(&pierwszy, x);
+            wypisz(pierwszy);
+        }
+        else {
+            printf("test %d: %s\n", i, linia);
+            if (pop_front(pierwszy, y) == 0) 
+            {
+                printf("Zwrocono wartosc %d\n", y);
+            }
+            wypisz(pierwszy);
+        }
+    }
+    return 0;
 }

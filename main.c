@@ -55,54 +55,75 @@ void push_back(Wezel** pierwszy, int liczba)
     iterator->nastepny = element;
 }
 
-
-#pragma region 8.0
-
-/**********************************************************/
-// Funkcja usuwa pierwszy element z jednokierunkowej listy
-
-int pop_front(Wezel **pierwszy, int *result)
+Wezel* get_elem(Wezel **node, int element)
 {
-   if (!pierwszy)
-       return -1;
-   
-   *result = (*pierwszy)->wartosc;
-   Wezel* drugi = (*pierwszy)->nastepny;
-   free(*pierwszy);
-   *pierwszy = drugi;
-   return 0;
+    Wezel* tmp = *node;
+    if (tmp == NULL)
+    {
+        printf("Pusta lista\n");
+        return NULL;
+    }
+    for (int i = 0; i < element; i++)
+    {
+        if (tmp->nastepny != NULL)
+            tmp = tmp->nastepny;
+        else
+        {
+            printf("Lista za krotka\n");
+            return NULL;
+        }
+    }
+    if (tmp->nastepny != NULL)
+        printf("Na pozycji %d znajduje sie wartosc %d \n", element, tmp->wartosc);
+    else
+        printf("Na pozycji ostatniej znajduje sie wartosc %d \n", tmp->wartosc);
+    return tmp;
 }
 
-/**********************************************************/
+int main() {
+    int dlugosc, pozycja;
+    int x = 0;
+    Wezel* pierwszy = NULL;
 
-int main() 
-{
-   char linia[20];
-   int T, x, y;
-   //int y;
-   Wezel* pierwszy = NULL;
+    //wczytaj wartosci i zbuduj liste
+    scanf("%d", &dlugosc);
+    for (int i = 0; i < dlugosc; i++) 
+    {
+        scanf("%d", &x);
+        push_back(&pierwszy, x);
+    }
 
-   scanf("%d", &T);
-   for (int i = 0; i < T; i++) 
-   {
-       scanf("%s", linia);
-       if (strstr(linia, "push_back")) 
-       {
-           scanf("%d", &x);
-           printf("test %d: %s %d\n", i, linia, x);
-           push_back(&pierwszy, x);
-           wypisz(pierwszy);
-       }
-       else {
-           printf("test %d: %s\n", i, linia);
-           if (pop_front(&pierwszy, &y) == 0) 
-           {
-               printf("Zwrocono wartosc %d\n", y);
-           }
-           wypisz(pierwszy);
-       }
-   }
-   return 0;
-}
- 
-#pragma endregion
+    //wypisz liste
+    Wezel* biezacy = pierwszy;
+    if (!biezacy) {
+        printf("Pusta lista");
+    }
+    else
+    {
+        printf("Lista:\t%d", biezacy->wartosc);
+        biezacy = biezacy->nastepny;
+        while (biezacy != NULL) {
+            printf("\t%d", biezacy->wartosc);
+            biezacy = biezacy->nastepny;
+        }
+    }
+    printf("\n");
+
+    //przetestuj funkcję get_elem dla pozycji 3-ciej
+    get_elem(&pierwszy, 3);
+
+    //przetestuj funkcję get_elem dla pozycji 0-wej
+    get_elem(&pierwszy, 0);
+
+    //przetestuj funkcję get_elem dla pozycji ostatniej
+    get_elem(&pierwszy, dlugosc - 1);
+
+    //przetestuj funkcję get_elem dla pozycji spoza listy
+    get_elem(&pierwszy, dlugosc);
+
+    //przetestuj funkcję get_elem dla pozycji drugiej (gdy lista jest pusta)
+    pierwszy = NULL;
+    get_elem(&pierwszy, 2);
+
+    return 0;
+}  

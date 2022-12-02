@@ -1,22 +1,5 @@
 //#include "zestawy.h"
-/*zestaw1_0(); return 1;*/
-/*zestaw1_1(); return 1;*/
-
-/*return zestaw2_0();*/
-/*return zestaw2_1();*/
-/*return zestaw2_2();*/
-//return zestaw2_3();
-
-/*return zestaw4_0();*/
-/*return zestaw4_1();*/
-/*return zestaw4_2();*/
-
-//return zestaw5_0();
-
-// w Visual Studio (22) kompilator krzyczy
-// o 'niebezpiecznych' funkcjach (printf_s i scanf_s)
 #define _CRT_SECURE_NO_WARNINGS
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,11 +11,9 @@ typedef struct wezel {
     struct wezel* nastepny;
     //struct wezel *poprzedni;  //w przypadku listy dwukierunkowej
 } Wezel;
-Wezel* pierwszy = NULL;
-
 
 /**********************************************************/
-void wypisz(/*Wezel* pierwszy*/) {
+void wypisz(Wezel* pierwszy) {
     Wezel* biezacy = pierwszy;
 
     if (!biezacy) {
@@ -48,7 +29,7 @@ void wypisz(/*Wezel* pierwszy*/) {
 /**********************************************************/
 
 //wstaw element na koniec listy
-void push_back(/*Wezel** pierwszy, */int liczba) 
+void push_back(Wezel** pierwszy, int liczba) 
 {
     Wezel* element;  // konstruujemy nowy węzeł
     Wezel* iterator = *pierwszy;
@@ -75,20 +56,20 @@ void push_back(/*Wezel** pierwszy, */int liczba)
 }
 
 
-#pragma region dokonczyc8_0
-
+#pragma region 8.0
 
 /**********************************************************/
 // Funkcja usuwa pierwszy element z jednokierunkowej listy
 
-int pop_front(/*Wezel **pierwszy, */int *result)
+int pop_front(Wezel **pierwszy, int *result)
 {
    if (!pierwszy)
        return -1;
    
-   &result = &pierwszy->wartosc;
-   pierwszy = pierwszy->nastepny;
-   free(pierwszy);
+   *result = (*pierwszy)->wartosc;
+   Wezel* drugi = (*pierwszy)->nastepny;
+   free(*pierwszy);
+   *pierwszy = drugi;
    return 0;
 }
 
@@ -96,11 +77,10 @@ int pop_front(/*Wezel **pierwszy, */int *result)
 
 int main() 
 {
-   int T;
    char linia[20];
-   int x, y;
-   
-
+   int T, x, y;
+   //int y;
+   Wezel* pierwszy = NULL;
 
    scanf("%d", &T);
    for (int i = 0; i < T; i++) 
@@ -115,7 +95,7 @@ int main()
        }
        else {
            printf("test %d: %s\n", i, linia);
-           if (pop_front(pierwszy, y) == 0) 
+           if (pop_front(&pierwszy, &y) == 0) 
            {
                printf("Zwrocono wartosc %d\n", y);
            }
@@ -124,73 +104,5 @@ int main()
    }
    return 0;
 }
-
  
 #pragma endregion
-
-// Wezel* get_elem(Wezel **node, int element)
-// {
-//     Wezel *tmp = node;
-//     if (tmp == NULL)
-//     {
-//         printf("Pusta lista");
-//         return NULL;
-//     }
-//     for (int i = 0; i < element; i++)
-//     {
-//         if (tmp->nastepny != NULL)   // <------------
-//             *tmp = *tmp->nastepny;
-//         else
-//         {
-//             printf("Lista za krotka");
-//             return NULL;
-//         }
-//     }
-        
-//     printf("Na pozycji %d znajduje sie wartosc %d \t", element, tmp->wartosc);
-//     return tmp;
-// }
-
-// int main() {
-//     int dlugosc, pozycja;
-//     int x = 0;
-//     Wezel* element;
-//     Wezel* pierwszy = NULL;
-
-//     //wczytaj wartosci i zbuduj liste
-//     scanf("%d", &dlugosc);
-//     for (int i = 0; i < dlugosc; i++) 
-//     {
-//         scanf("%d", &x);
-//         push_back(&pierwszy, x);
-//     }
-
-//     //wypisz liste
-//     Wezel* biezacy = pierwszy;
-//     if (!biezacy) {
-//         printf("Pusta lista\n");
-//     }
-//     while (biezacy != NULL) {
-//         printf("%d\t", biezacy->wartosc);
-//         biezacy = biezacy->nastepny;
-//     }
-//     printf("\n");
-
-//     //przetestuj funkcję get_elem dla pozycji 3-ciej
-//     get_elem(&pierwszy, 3);
-
-//     //przetestuj funkcję get_elem dla pozycji 0-wej
-//     get_elem(&pierwszy, 0);
-
-//     //przetestuj funkcję get_elem dla pozycji ostatniej
-//     get_elem(&pierwszy, dlugosc);
-
-//     //przetestuj funkcję get_elem dla pozycji spoza listy
-//     get_elem(&pierwszy, dlugosc + 1);
-
-//     //przetestuj funkcję get_elem dla pozycji drugiej (gdy lista jest pusta)
-//     pierwszy = NULL;
-//     get_elem(pierwszy, dlugosc);
-
-//     return 0;
-// }

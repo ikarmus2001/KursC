@@ -598,7 +598,6 @@ int zestaw7_2(void)
 
 #pragma region Zestaw 8
 
-/*
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -610,6 +609,7 @@ typedef struct wezel {
 	//struct wezel *poprzedni;  //w przypadku listy dwukierunkowej
 } Wezel;
 
+/**********************************************************/
 void wypisz(Wezel* pierwszy) {
 	Wezel* biezacy = pierwszy;
 
@@ -623,6 +623,7 @@ void wypisz(Wezel* pierwszy) {
 	}
 	printf("\n");
 }
+/**********************************************************/
 
 //wstaw element na koniec listy
 void push_back(Wezel** pierwszy, int liczba)
@@ -650,11 +651,9 @@ void push_back(Wezel** pierwszy, int liczba)
 
 	iterator->nastepny = element;
 }
-*/
-
 
 #pragma region 8.0
-/*
+
 // Funkcja usuwa pierwszy element z jednokierunkowej listy
 int pop_front(Wezel** pierwszy, int* result)
 {
@@ -698,11 +697,11 @@ int zestaw8_0()
 	}
 	return 0;
 }
-*/
+
 #pragma endregion
 
 #pragma region 8.1
-/*
+
 void push_front(Wezel** node, int value)
 {
 	Wezel* nowy;
@@ -741,78 +740,84 @@ int zestaw8_1()
 	}
 	return 0;
 }
-*/
 
 #pragma endregion
 
 #pragma region zestaw8_2
 
-// Wezel* get_elem(Wezel **node, int element)
-// {
-//     Wezel *tmp = node;
-//     if (tmp == NULL)
-//     {
-//         printf("Pusta lista");
-//         return NULL;
-//     }
-//     for (int i = 0; i < element; i++)
-//     {
-//         if (tmp->nastepny != NULL)   // <------------
-//             *tmp = *tmp->nastepny;
-//         else
-//         {
-//             printf("Lista za krotka");
-//             return NULL;
-//         }
-//     }
+Wezel* get_elem(Wezel **node, int element)
+{
+    Wezel* tmp = *node;
+    if (tmp == NULL)
+    {
+        printf("Pusta lista\n");
+        return NULL;
+    }
+    for (int i = 0; i < element; i++)
+    {
+        if (tmp->nastepny != NULL)
+            tmp = tmp->nastepny;
+        else
+        {
+            printf("Lista za krotka\n");
+            return NULL;
+        }
+    }
+    if (tmp->nastepny != NULL)
+        printf("Na pozycji %d znajduje sie wartosc %d \n", element, tmp->wartosc);
+    else
+        printf("Na pozycji ostatniej znajduje sie wartosc %d \n", tmp->wartosc);
+    return tmp;
+}
 
-//     printf("Na pozycji %d znajduje sie wartosc %d \t", element, tmp->wartosc);
-//     return tmp;
-// }
+int zestaw8_2() {
+    int dlugosc, pozycja;
+    int x = 0;
+    Wezel* pierwszy = NULL;
 
-// int main() {
-//     int dlugosc, pozycja;
-//     int x = 0;
-//     Wezel* element;
-//     Wezel* pierwszy = NULL;
+    //wczytaj wartosci i zbuduj liste
+    scanf("%d", &dlugosc);
+    for (int i = 0; i < dlugosc; i++) 
+    {
+        scanf("%d", &x);
+        push_back(&pierwszy, x);
+    }
 
-//     //wczytaj wartosci i zbuduj liste
-//     scanf("%d", &dlugosc);
-//     for (int i = 0; i < dlugosc; i++) 
-//     {
-//         scanf("%d", &x);
-//         push_back(&pierwszy, x);
-//     }
+    //wypisz liste
+    Wezel* biezacy = pierwszy;
+    if (!biezacy) {
+        printf("Pusta lista");
+    }
+    else
+    {
+        printf("Lista:\t%d", biezacy->wartosc);
+        biezacy = biezacy->nastepny;
+        while (biezacy != NULL) {
+            printf("\t%d", biezacy->wartosc);
+            biezacy = biezacy->nastepny;
+        }
+    }
+    printf("\n");
 
-//     //wypisz liste
-//     Wezel* biezacy = pierwszy;
-//     if (!biezacy) {
-//         printf("Pusta lista\n");
-//     }
-//     while (biezacy != NULL) {
-//         printf("%d\t", biezacy->wartosc);
-//         biezacy = biezacy->nastepny;
-//     }
-//     printf("\n");
+    //przetestuj funkcję get_elem dla pozycji 3-ciej
+    get_elem(&pierwszy, 3);
 
-//     //przetestuj funkcję get_elem dla pozycji 3-ciej
-//     get_elem(&pierwszy, 3);
+    //przetestuj funkcję get_elem dla pozycji 0-wej
+    get_elem(&pierwszy, 0);
 
-//     //przetestuj funkcję get_elem dla pozycji 0-wej
-//     get_elem(&pierwszy, 0);
+    //przetestuj funkcję get_elem dla pozycji ostatniej
+    get_elem(&pierwszy, dlugosc - 1);
 
-//     //przetestuj funkcję get_elem dla pozycji ostatniej
-//     get_elem(&pierwszy, dlugosc);
+    //przetestuj funkcję get_elem dla pozycji spoza listy
+    get_elem(&pierwszy, dlugosc);
 
-//     //przetestuj funkcję get_elem dla pozycji spoza listy
-//     get_elem(&pierwszy, dlugosc + 1);
+    //przetestuj funkcję get_elem dla pozycji drugiej (gdy lista jest pusta)
+    pierwszy = NULL;
+    get_elem(&pierwszy, 2);
 
-//     //przetestuj funkcję get_elem dla pozycji drugiej (gdy lista jest pusta)
-//     pierwszy = NULL;
-//     get_elem(pierwszy, dlugosc);
+    return 0;
+}  
 
-//     return 0;
-// }  
-#pragma endregion
+#pragma endregion  
 
 #pragma endregion

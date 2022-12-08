@@ -1,129 +1,131 @@
 //#include "zestawy.h"
 #define _CRT_SECURE_NO_WARNINGS
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#define ZA_MALO_PAMIECI -1
+#include <time.h>
 
 typedef struct wezel {
-    int wartosc;
-    struct wezel* nastepny;
-    //struct wezel *poprzedni;  //w przypadku listy dwukierunkowej
-} Wezel;
+	char* tytul;
+	char* autor;
+	double cena;
+	int ilosc;
+	struct wezel* nastepny;
+} ksiazka;
 
-/**********************************************************/
-void wypisz(Wezel* pierwszy) {
-    Wezel* biezacy = pierwszy;
+bool wypelnijMagazyn(const char* nazwaPliku, ksiazka** pierwszy) {
+	FILE* fp;
+	char* result;
 
-    if (!biezacy) {
-        printf("Pusta lista\n");
-    }
+	fp = fopen(nazwaPliku, "r");
+	if (fp == NULL) {
+		printf("Nie można otworzyć pliku\n");
+		return false;
+	}
 
-    while (biezacy != NULL) {
-        printf("%d\n", biezacy->wartosc);
-        biezacy = biezacy->nastepny;
-    }
-    printf("\n");
+	ksiazka* node = *pierwszy;
+	char buffer[700];
+	for (int j = 1; j < 30; j++){
+		char tytul_str[255];
+		char autor_str[255];
+		char float_str[15];
+		char* napis;
+		int indeks = 0;
+		int liczba = 0;
+		float cena;
+
+		int property_i = 0;
+		napis = tytul_str;
+
+		fgets(buffer, 700, fp);
+		for (size_t i = 0; property_i < 4; i++) {
+			if (buffer[i] != ';') {
+				if (property_i != 2) {
+					napis[indeks] = buffer[i];
+					indeks++;
+					continue;
+				}
+				else {
+					liczba = liczba * 10 + (buffer[i] - '0');
+					continue;
+				}
+			}
+			else {
+				if (property_i != 2)
+					napis[indeks] = '\0';
+				napis[254] = '\0';
+
+				switch (property_i) {
+				case 0:
+					napis = autor_str;
+					break;
+				case 1:
+					break;
+				case 2:
+					napis = float_str;
+					break;
+				case 3:
+					cena = (double)atof(napis);
+					break;
+				}
+				indeks = 0;
+				property_i++;
+			}
+		}
+
+		ksiazka* k = (ksiazka*)malloc(sizeof(ksiazka));
+		k->ilosc = liczba;
+		k->cena = cena;
+		k->nastepny = NULL;
+		strcpy(*k->autor, autor_str);
+		strcpy(*k->tytul, tytul_str);
+		
+
+		if (!node) {
+			/*node = (ksiazka*)malloc(sizeof(ksiazka));*/
+			*pierwszy = &k;
+			node = *pierwszy;
+		}
+		else {
+			node->nastepny = &k;
+			node = node->nastepny;
+		}
+	}
+	fclose(fp);
+	return true;
 }
-/**********************************************************/
 
-//wstaw element na koniec listy
-void push_back(Wezel** pierwszy, int liczba) 
+void wyswietlKsiazke(int pozycja, ksiazka** pierwszy)
 {
-    Wezel* element;  // konstruujemy nowy węzeł
-    Wezel* iterator = *pierwszy;
-
-    if ((element = (Wezel*)malloc(sizeof(Wezel))) == NULL) 
-    {
-        fprintf(stderr, "Za mało pamięci!\n");
-        exit(ZA_MALO_PAMIECI);
-    }
-    element->wartosc = liczba;
-    element->nastepny = NULL;
-
-    if (iterator == NULL) //gdy pusta lista
-    {
-        *pierwszy = element;
-        return;
-    }
-
-    while (iterator->nastepny != NULL) {
-        iterator = iterator->nastepny;
-    }
-
-    iterator->nastepny = element;
-}
-
-Wezel* get_elem(Wezel **node, int element)
-{
-    Wezel* tmp = *node;
-    if (tmp == NULL)
-    {
-        printf("Pusta lista\n");
-        return NULL;
-    }
-    for (int i = 0; i < element; i++)
-    {
-        if (tmp->nastepny != NULL)
-            tmp = tmp->nastepny;
-        else
-        {
-            printf("Lista za krotka\n");
-            return NULL;
-        }
-    }
-    if (tmp->nastepny != NULL)
-        printf("Na pozycji %d znajduje sie wartosc %d \n", element, tmp->wartosc);
-    else
-        printf("Na pozycji ostatniej znajduje sie wartosc %d \n", tmp->wartosc);
-    return tmp;
+	ksiazka* biezacy = *pierwszy;
+	if (!biezacy) {
+	    printf("W magazynie nie ma ksiazki o podanej pozycji\n");
+		return;
+	}
+	for (int i = 0; i < pozycja; i++) {
+		if (biezacy != NULL)
+			biezacy = biezacy->nastepny;
+		else {
+			printf("W magazynie nie ma ksiazki o podanej pozycji\n");
+			return;
+		}
+	}
+	printf("Ksiazka nr %d to: %s %s %d %f", 
+		pozycja, biezacy->tytul, biezacy->autor, biezacy->ilosc, biezacy->cena);
 }
 
 int main() {
-    int dlugosc, pozycja;
-    int x = 0;
-    Wezel* pierwszy = NULL;
-
-    //wczytaj wartosci i zbuduj liste
-    scanf("%d", &dlugosc);
-    for (int i = 0; i < dlugosc; i++) 
-    {
-        scanf("%d", &x);
-        push_back(&pierwszy, x);
-    }
-
-    //wypisz liste
-    Wezel* biezacy = pierwszy;
-    if (!biezacy) {
-        printf("Pusta lista");
-    }
-    else
-    {
-        printf("Lista:\t%d", biezacy->wartosc);
-        biezacy = biezacy->nastepny;
-        while (biezacy != NULL) {
-            printf("\t%d", biezacy->wartosc);
-            biezacy = biezacy->nastepny;
-        }
-    }
-    printf("\n");
-
-    //przetestuj funkcję get_elem dla pozycji 3-ciej
-    get_elem(&pierwszy, 3);
-
-    //przetestuj funkcję get_elem dla pozycji 0-wej
-    get_elem(&pierwszy, 0);
-
-    //przetestuj funkcję get_elem dla pozycji ostatniej
-    get_elem(&pierwszy, dlugosc - 1);
-
-    //przetestuj funkcję get_elem dla pozycji spoza listy
-    get_elem(&pierwszy, dlugosc);
-
-    //przetestuj funkcję get_elem dla pozycji drugiej (gdy lista jest pusta)
-    pierwszy = NULL;
-    get_elem(&pierwszy, 2);
-
-    return 0;
-}  
+	int T;
+	ksiazka* pierwszy = NULL;
+	scanf("%d", &T);
+	for (int i = 0; i < T; i++) {
+		char NazwaPliku[200];
+		int pozycja = 0;
+		scanf("%s %d", NazwaPliku, &pozycja);
+		bool sukces = wypelnijMagazyn(NazwaPliku, &pierwszy);
+		if (sukces)
+			wyswietlKsiazke(pozycja, &pierwszy);
+	}
+	return 0;
+}

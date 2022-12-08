@@ -27,9 +27,9 @@ bool wypelnijMagazyn(const char* nazwaPliku, ksiazka** pierwszy) {
 	ksiazka* node = *pierwszy;
 	char buffer[700];
 	for (int j = 1; j < 30; j++){
-		char* tytul_str[255] = {0};
-		char* autor_str[255] = {0};
-		char* float_str[15] = {0};
+		char tytul_str[255];
+		char autor_str[255];
+		char float_str[15];
 		char* napis;
 		int indeks = 0;
 		int liczba = 0;

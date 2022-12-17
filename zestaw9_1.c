@@ -19,7 +19,6 @@ typedef struct wezel {
 // Funkcja rozdziela zawartość linii względem separatora i przekazuje wartości do pozostałych zmiennych
 void my_split(char* linia, char* tytul, char* autor, char* ilosc, char* cena, char separator) {
 
-	// czyszczenie pamięci z ewentualnych pozostałości
 	memset(tytul, 0, sizeof(tytul));
 	memset(autor, 0, sizeof(autor));
 	memset(ilosc, 0, sizeof(ilosc));
@@ -83,7 +82,8 @@ void push_back(ksiazka* nowy, ksiazka** pierwszy) {
 	iterator->nastepny = nowy;
 }
 
-void wyswietlKsiazke(int pozycja, ksiazka* pierwszy) {
+void wyswietlKsiazke(int pozycja, ksiazka* pierwszy)
+{
 	ksiazka* biezacy = pierwszy;
 	// if (!biezacy) {
 	//     printf("W magazynie nie ma ksiazki o podanej pozycji\n");
@@ -97,7 +97,7 @@ void wyswietlKsiazke(int pozycja, ksiazka* pierwszy) {
 		pozycja, biezacy->tytul, biezacy->autor, biezacy->ilosc, biezacy->cena);
 }
 
-bool wypelnijMagazyn(const char* nazwaPliku, ksiazka** pierwszy) {
+bool wypelnijMagazyn(const char* nazwaPliku, ksiazka** pierwszy){
 
     FILE *fp = fopen (nazwaPliku, "r");
     if (fp == NULL) {
@@ -105,16 +105,15 @@ bool wypelnijMagazyn(const char* nazwaPliku, ksiazka** pierwszy) {
        return 0;
     }
     const int max_n = 500;
-    char linia[max_n], *result;
-    char tytul[200];
-    char autor[100];
-    char ilosc[10];
-    char cena[20];
-    char *frag;
-    
-    //for(int i = 0; i < ROZMIAR; ++i) {
-    while(!feof(fp)){
-    
+		char linia[max_n], *result;
+		char tytul[200];
+		char autor[100];
+		char ilosc[10];
+		char cena[20];
+		char *frag;
+		
+	while(!feof(fp)){
+
        ksiazka *element;
        if ((element = (ksiazka*)malloc(sizeof(ksiazka))) == NULL ) {
           fprintf(stderr, "Za mało pamięci!\n");
